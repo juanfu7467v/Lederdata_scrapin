@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Telegram API Wrapper - Consulta PE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    header {
+      background: #25d366; /* verde tipo WhatsApp */
+      color: white;
+      width: 100%;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      max-width: 500px;
+      width: 100%;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #128c7e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0d6e63;
+    }
+    pre {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+      width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin-top: 20px;
+    }
+    footer {
+      padding: 10px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>Telegram API Wrapper - Consulta PE</header>
+
+  <main>
+    <h2>Consulta RENIEC</h2>
+    <input type="text" id="dni" placeholder="Ingresa el DNI (8 dígitos)" maxlength="8">
+    <button onclick="consultar()">Consultar</button>
+    <pre id="resultado">Esperando consulta...</pre>
+  </main>
+
+  <footer>
+    © 2025 - API Wrapper para <strong>@LEDERDATA_OFC_BOT</strong>
+  </footer>
+
+  <script>
+    async function consultar() {
+      const dni = document.getElementById("dni").value.trim();
+      const resultado = document.getElementById("resultado");
+
+      if (dni.length !== 8 || isNaN(dni)) {
+        resultado.textContent = "⚠️ DNI inválido. Debe tener 8 dígitos.";
+        return;
+      }
+
+      resultado.textContent = "⏳ Consultando...";
+
+      try {
+        const resp = await fetch(`/api/telegram/reniec/${dni}`);
+        const data = await resp.json();
+        resultado.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        resultado.textContent = "❌ Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
